@@ -1,14 +1,9 @@
-$(document).ready(function() {
-    window.alert("Hello!");
-    var json_file;
-//    json = call_api();
-//    json_file = call_3();
-//    console.log(json_file);
-//    $(".test").append(json_file.city.name);
-    
+$(document).ready(function () {
+    $('#wheather_form').submit(function () {
+    call_api_load_map();
+    return false;
 });
-
-
+});
 
 var call_api_load_map = function() {
     var search_city = $("input[name=location]").val();
@@ -18,36 +13,33 @@ var call_api_load_map = function() {
     var url_start = "http://api.openweathermap.org/data/2.5/forecast?q="
     var api_key = "3a63ff88497e73a0dd39208e8e969b5e";
     
-    var search_url = url_start + search_city + "," + country_code + "&mode=json&appid=" + api_key + "&units=" + units
+    var search_url = url_start + search_city + "," + country_code + "&mode=json&appid=" + api_key + "&units=" + units;
+//    "http://api.openweathermap.org/data/2.5/forecast/daily?q= Dublin,IE &mode=json&appid= 3a63ff88497e73a0dd39208e8e969b5e &units= metric &cnt=5%22";
     
-    "http://api.openweathermap.org/data/2.5/forecast/daily?q= Dublin,IE &mode=json&appid= 3a63ff88497e73a0dd39208e8e969b5e &units= metric &cnt=5%22"
+    var json = return_json_object(search_url);
     
-    alert(search_url);
+    build_google_maps(json);
+    
+    
     
 };
 
-var print = function() {
-    alert("hello");
-}
+var build_google_maps = function(json_file){
+    console.log(json);
+;}
 
-
-var call_2 = function () {
-    var file = $.getJSON("http://api.openweathermap.org/data/2.5/forecast/daily?lat=53.3498053&lon=-6.260309699999993&mode=json&appid=3a63ff88497e73a0dd39208e8e969b5e&units=metric&cnt=5", function(data) {
-        json_file = JSON.parse(data);
-        console.log(json_file);
-    });
-};
-
-var call_3 = function() {
+//
+var return_json_object = function(search_url) {
     var json = null;
     $.ajax({
         'async': false,
         'global': false,
-        'url': "http://api.openweathermap.org/data/2.5/forecast/daily?lat=53.3498053&lon=-6.260309699999993&mode=json&appid=3a63ff88497e73a0dd39208e8e969b5e&units=metric&cnt=5",
+        'url': search_url,
         'dataType': "json",
         'success': function (data) {
             json = data;
         }
     });
+//    console.log(json);
     return json;
 };

@@ -28,12 +28,6 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="wheather.js"></script>
         
-        <!--  Google maps auto complete lib      -->
-<!--
-        <script src="http://maps.googleapis.com/maps/api/js?libraries=places"></script>
-        <script src="jquery.geocomplete.js"></script>
--->
-        
       <!-- Icon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <link rel="icon" type="image/png" href="../images/Icon.jpg">
@@ -153,18 +147,19 @@
                         <div class="box_back">
    
                             <div><p class="test"></p></div>
-                            <form id="wheather_form" onsubmit="call_api_load_map()">
+                            <form id="wheather_form">
                                 <table style="width:100%;">
                                     <tr class="spaced">
                                         <td>
                                             The city or location:<br>
-                                            <input type="text" id="geocomplete" name="location">
+                                            <input type="text" name="location">
                                         </td>
                                         <td>
                                             <!-- This country code selctor was taken from http://www.freeformatter.com/iso-country-list-html-select.html -->
                                             <!-- It follows ISO-3366-1: Alpha-2 Codes -->
                                             Select Country <br>
                                             <select id="country_code">
+                                                <option value="IE">Ireland</option>
                                                 <option value="AF">Afghanistan</option>
                                                 <option value="AX">Åland Islands</option>
                                                 <option value="AL">Albania</option>
@@ -437,7 +432,7 @@
                                         <td></td>
                                         <td>
                                             <button type="reset" style="color:yellow;">Reset</button>
-                                            <button type="submit" style="color:yellow;">Submit</button>
+                                            <button type="submit" style="color:yellow;" value="">Submit</button>
                                         </td>
                                     </tr>
                                 </table> 
@@ -500,10 +495,10 @@
                     <section class="center">
                         <div class="social small_social">
                         Wana to get Social? <br>
-                            <a href="https://www.facebook.com/bicycletouring" target="_blank"><span> <img src="../images/Social/facebook42.jpg" class="rotate" title="Facebook link" alt="link"></span></a>
-                            <a href="https://twitter.com/hashtag/cycletouring" target="_blank"><span> <img src="../images/Social/twitter42.png" class="rotate" title="Twitter link" height="40" width="40" alt="link"></span></a>
-                            <a href="https://www.youtube.com/user/globalcyclingnetwork" target="_blank"><span> <img src="../images/Social/youtube42.png" class="rotate" title="Youtube link" height="40" width="40" alt="link"></span></a>
-                            <a href="https://ie.linkedin.com/pub/conor-o-kelly/68/a67/658" target="_blank"><span> <img src="../images/Social/linkedin42.png" class="rotate" title="LinkedIn link" height="40" width="40" alt="link"></span></a>
+                            <a href="https://www.facebook.com/bicycletouring" target="_blank"><span> <img src="images/Social/facebook42.jpg" class="rotate" title="Facebook link" alt="link"></span></a>
+                            <a href="https://twitter.com/hashtag/cycletouring" target="_blank"><span> <img src="images/Social/twitter42.png" class="rotate" title="Twitter link" height="40" width="40" alt="link"></span></a>
+                            <a href="https://www.youtube.com/user/globalcyclingnetwork" target="_blank"><span> <img src="images/Social/youtube42.png" class="rotate" title="Youtube link" height="40" width="40" alt="link"></span></a>
+                            <a href="https://ie.linkedin.com/pub/conor-o-kelly/68/a67/658" target="_blank"><span> <img src="images/Social/linkedin42.png" class="rotate" title="LinkedIn link" height="40" width="40" alt="link"></span></a>
                         </div>
                     </section>
                 </div>
