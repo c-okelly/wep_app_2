@@ -25,9 +25,14 @@
 
     <!-- JavaScript
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<!--        <script src="https://maps.googleapis.com/maps/api/jsvv=3.exp&sensor=false&libraries=places"></script>-->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="wheather.js"></script>
-        
+        <!--   Google maps JS     -->
+        <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBy8wTZI8iqNkK5QcB2XPusZl03xvcGV9c&callback=initMap&libraries=places"async defer></script>
+
+
       <!-- Icon
       –––––––––––––––––––––––––––––––––––––––––––––––––– -->
         <link rel="icon" type="image/png" href="../images/Icon.jpg">
@@ -145,18 +150,25 @@
                 <div class="twelve columns">
                     <section class="main_box_center">
                         <div class="box_back">
-   
-                            <div><p class="test"></p></div>
+                            
+                        
                             <form id="wheather_form">
                                 <table style="width:100%;">
                                     <tr class="spaced">
                                         <td>
+                                            <label for="locationTextField">Location</label>
+                                            <input id="locationTextField" type="text" size="50">
+                                            <div id="output"></div>
+                                            <input id="lat" style="display:none"><input id="long" style="display:none">
+<!--
                                             The city or location:<br>
                                             <input type="text" name="location">
+-->
                                         </td>
-                                        <td>
+<!--                                        <td>-->
                                             <!-- This country code selctor was taken from http://www.freeformatter.com/iso-country-list-html-select.html -->
                                             <!-- It follows ISO-3366-1: Alpha-2 Codes -->
+<!--
                                             Select Country <br>
                                             <select id="country_code">
                                                 <option value="IE">Ireland</option>
@@ -411,12 +423,13 @@
                                                 <option value="ZW">Zimbabwe</option>
                                             </select>
                                         </td>
+-->
                                     </tr>
                                     <tr class="spaced">
                                         <td>
                                             <input type="radio" name="units" value="Metric">Metric &nbsp;&nbsp;&nbsp;
                                             <input type="radio" name="units" value="Imperical">Imperial &nbsp;&nbsp;&nbsp;
-                                            <input type="radio" name="units" value="Scintific">Scinetifc &nbsp;&nbsp;&nbsp;
+                                            <input type="radio" name="units" value="">Scinetifc &nbsp;&nbsp;&nbsp;
                                         </td>
                                     </tr>
                                     <tr>
@@ -432,7 +445,7 @@
                                         <td></td>
                                         <td>
                                             <button type="reset" style="color:yellow;">Reset</button>
-                                            <button type="submit" style="color:yellow;" value="">Submit</button>
+                                            <button type="submit" style="color:yellow;" class="sub_button">Submit</button>
                                         </td>
                                     </tr>
                                 </table> 
@@ -447,8 +460,8 @@
                     <section class="main_box_center">
                         <div class="box_back center">
                             <p class="bold_lined">This map will show the wheather data!</p>
-                    <!--    Script copied from Google Maps     -->
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d152515.69312067638!2d-6.251694999999978!3d53.324320099999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48670e80ea27ac2f%3A0xa00c7a9973171a0!2sDublin!5e0!3m2!1sen!2sie!4v1429736274097" width=85% height="400" style="border:0"></iframe>
+
+                                <div style="height: 500px;" id="map"></div>
                     
                         </div>
                     </section>
