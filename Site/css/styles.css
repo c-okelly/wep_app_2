@@ -617,3 +617,9 @@ kit_text_wraped {
     margin-left: auto;
     margin-right: auto;
 }
+
+
+
+.lined td{
+    border:5px solid black;
+}
