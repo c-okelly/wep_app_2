@@ -103,7 +103,7 @@ var call_api_load_map = function() {
         var rain = json.list[day].rain;
         if (rain === undefined) {rain = "0"};
         
-        var text_input = inset_main_information(date,wheather_discription,icon_no,max_temp,min_temp,temp_symbol,rain,pressure,humidity,wind_speed);
+        var text_input = inset_main_information(day_no,date,wheather_discription,icon_no,max_temp,min_temp,temp_symbol,rain,pressure,humidity,wind_speed);
         
         
         //Javascript loop to go through all relevent days
@@ -115,7 +115,8 @@ var call_api_load_map = function() {
      $.getJSON(serach_24_url, function(data) {
         var json_24 = data;
          console.log(json_24);
-         tweenty_four_hours(json_24);
+         // Set timeout user to prevent 429 error from open wheahter api
+         setTimeout(function() {tweenty_four_hours(json_24,no_days);},2000)
      });
     
     // Two loops to create and insert the data
@@ -123,8 +124,8 @@ var call_api_load_map = function() {
 };
 
 // Load main text into page
-var inset_main_information = function (date,wheather_discription,icon_no,max_temp,min_temp,temp_symbol,rain,pressure,humidity,wind_speed) {
-    var text_input = "<div class='row'> \
+var inset_main_information = function (day_no,date,wheather_discription,icon_no,max_temp,min_temp,temp_symbol,rain,pressure,humidity,wind_speed) {
+    var text_input = "<div class='forecast_for_day_"+day_no+"'><div class='row'> \
                                 <div class='three columns offset-by-two'> \
                                    <p> Wheather for the<br> "+date+" is.<br> \
                                     The wheather today is "+wheather_discription+". <br> <br> \
@@ -165,7 +166,7 @@ var inset_main_information = function (date,wheather_discription,icon_no,max_tem
                                         </tr> \
                                     </table> \
                                 </div> \
-                            </div> <br><br>";
+                            </div> </div><br>";
     return text_input;
 }  
 
@@ -196,8 +197,8 @@ var check_boxs = function() {
 ;}
 
 
-//// Create 24 hours version
-var tweenty_four_hours = function(json_object) {
+//// Create 24 hours version with 3 hours forcasts for each day.
+var tweenty_four_hours = function(json_object,no_days) {
     var first_time = json_object.list[0].dt_txt.substring(11,13);
 
     // Check how many items are to be in day 1. As tempature dependant.
@@ -229,16 +230,25 @@ var tweenty_four_hours = function(json_object) {
             break;
     }   
     
+    // Create first day of forcasts
     day_1_forcasts = create_first_forecast_row(json_object,day_1_items);
-    console.log(day_1_forcasts)
+    console.log(day_1_forcasts);
+    
+    day_2_forscast = create_gen_full_forcast_row(json_object,day_1_items,2);
+    day_3_forscast = create_gen_full_forcast_row(json_object,day_1_items,3);
+    day_4_forscast = create_gen_full_forcast_row(json_object,day_1_items,4);
+    day_5_forscast = create_gen_full_forcast_row(json_object,day_1_items,5);
     
     
-    
-//    row_1_item = generate_row_4(json_object,0,3);
-    
-    $("#forecast").append(day_1_forcasts);
+    // Append rows to their correct locations
+    $(".forecast_for_day_1").append(day_1_forcasts);
+    $(".forecast_for_day_2").append(day_2_forscast);
+    $(".forecast_for_day_3").append(day_3_forscast);
+    $(".forecast_for_day_4").append(day_4_forscast);
+    $(".forecast_for_day_5").append(day_5_forscast);
     ;}
 
+// Use json array from object to bulid general table in html ready to be inserted
 var generate_single_table = function(json_array) {
     var rain = json_array.rain["3h"];
     if (rain === undefined) {rain = "0"};
@@ -285,6 +295,7 @@ var generate_single_table = function(json_array) {
     
 };
 
+// Generate a full fow. Will generate dynamic and respoinse html
 var generate_row_4 = function(json_object,start,finish) {
     // number of columns
     var no_columns;
@@ -310,11 +321,9 @@ var generate_row_4 = function(json_object,start,finish) {
     
     var start_range = start;
     var end_range = finish;
-    console.log(start_range, end_range)
     
     for (i=start_range;i<end_range;i++) {
         text = generate_single_table(json_object.list[i]);
-        console.log(i);
         text = "<div class='"+no_columns+" columns'>" + text + "</div>";
         middle_bit = middle_bit + text;
     }
@@ -322,6 +331,7 @@ var generate_row_4 = function(json_object,start,finish) {
     return finisihed_row;
 ;}
 
+// Create first forecast row. Unique as is dynamially generated
 var create_first_forecast_row = function(json_object,day_1_items){
     if (day_1_items >= 4) {
         var forcasts_on_second_row = (day_1_items % 4);
@@ -331,8 +341,27 @@ var create_first_forecast_row = function(json_object,day_1_items){
     } else {
         var both_row = generate_row_4(json_object,0,day_1_items);
     }
+    // Statement if no results to shows as no more forecast are availibe for the day.
+    var statement = "";
+    if (day_1_items === 0) {statement = "Sorry. There are no more forcasts for the day as it is alreayd past 21:00";}
     // Add formating for to capture whole row in a class
-    both_row = "<div class='day_1_extend_forcast'>" +both_row + "</div>"
+    both_row = "<div class='day_1_extend_forcast, center'> 24 hour forcasts for day 1<br>" + statement + both_row + "<br></div>"
     return both_row;
 
 ;}
+
+// Create a full day of 8 3 hours forcasta
+var create_gen_full_forcast_row = function(json_object,first_day_no_forcastas,day_no){
+    // Create generalised ragne point for day to be taken from
+    var start_point = (((day_no-2) * 8)+first_day_no_forcastas);
+    var row_1 = generate_row_4(json_object,start_point,(start_point+4))
+    var row_2 = generate_row_4(json_object,(start_point+4),(start_point+8));
+    
+    var both_rows = "<div class='day_"+day_no+"_extend_forcast, center'> 24 hour Forecasts for day "+ day_no + row_1 + " <br>"+ row_2 +"</div>";
+    
+    return both_rows;
+    ;}
+
+var fade_on_click_for_24_hour_forcasta = function() {
+    var x = 1;
+    ;}
