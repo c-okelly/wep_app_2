@@ -45,7 +45,6 @@ function init() {
         
         lat1 = place.geometry.location.lat();
         lng1 = place.geometry.location.lng();
-//        console.log(lat1,lng1);
         document.getElementById("lat").value=lat1;
         document.getElementById("long").value=lng1;
    }
@@ -56,7 +55,6 @@ function init() {
 var call_api_load_map = function() {
     var lat = $("input[id=lat]").val();
     var long = $("input[id=long]").val();
-//    console.log(long, lat);
     var units = $("input[name=units]:checked").val();
     var no_days = $("input[name=no_days]:checked").val();    
     var url_start = "http://api.openweathermap.org/data/2.5/forecast/daily?"; // To get daily data
@@ -74,7 +72,7 @@ var call_api_load_map = function() {
     $.getJSON(search_url, function(data) {
         var json = data;
         
-//        console.log(json);
+        
 //        var no_days = no_days;
         
         for (day=0;day<no_days;day++){
@@ -159,7 +157,7 @@ var inset_main_information = function (date,wheather_discription,icon_no,max_tem
                                         </tr> \
                                          <tr class='humidity_display'> \
                                             <td>Humidity</td> \
-                                            <td> "+humidity+" </td> \
+                                            <td> "+humidity+"% </td> \
                                         </tr> \
                                          <tr class='wind_speed_display'> \
                                             <td>Wind Speed</td>  \
@@ -201,40 +199,50 @@ var check_boxs = function() {
 //// Create 24 hours version
 var tweenty_four_hours = function(json_object) {
     var first_time = json_object.list[0].dt_txt.substring(11,13);
+
+    // Check how many items are to be in day 1. As tempature dependant.
+    var day_1_items;
+    switch (first_time) {
+         case "03":
+            day_1_items = 7;
+            break;
+         case "06":
+            day_1_items = 6;
+            break;
+         case "09":
+            day_1_items = 5;
+            break;
+         case "12":
+            day_1_items = 4;
+            break;
+         case "15":
+            day_1_items = 3;
+            break;
+         case "18":
+            day_1_items = 2;
+            break;
+         case "21":
+            day_1_items = 1;
+            break;
+        case "00":
+            day_1_items = 0;
+            break;
+    }   
     
-    console.log(first_time);
-    var row_1_item;
-//    switch (first_time) {
-//        case "00":
-//            row_1_item = 8;
-//            break;
-//         case "03":
-//            row_1_item = 7;
-//            break;
-//         case "06":
-//            row_1_item = 6;
-//            break;
-//         case "09":
-//            row_1_item = 5;
-//            break;
-//         case "12":
-//            row_1_item = 4;
-//            break;
-//         case "15":
-//            row_1_item = 3;
-//            break;
-//         case "18":
-//            row_1_item = 2;
-//            break;
-//         case "21":
-//            row_1_item = 1;
-//            break;
-//    }   
-    row_1_item = generate_row_4(json_object,0,3);
-    $("#forecast").append(row_1_item);
+    day_1_forcasts = create_first_forecast_row(json_object,day_1_items);
+    console.log(day_1_forcasts)
+    
+    
+    
+//    row_1_item = generate_row_4(json_object,0,3);
+    
+    $("#forecast").append(day_1_forcasts);
     ;}
 
 var generate_single_table = function(json_array) {
+    var rain = json_array.rain["3h"];
+    if (rain === undefined) {rain = "0"};
+    
     var text = "<table class='lined'> \
                                         <tr>  \
                                             <td style='min-width:120px;'>Wheather info at</td>  \
@@ -242,35 +250,35 @@ var generate_single_table = function(json_array) {
                                         </tr> \
                                         <tr>  \
                                             <td>Wheather description</td>  \
-                                            <td> 1 </td>  \
+                                            <td> "+json_array.weather[0].description+" </td>  \
                                         </tr> \
                                         <tr>  \
                                             <td>Wheather icon</td>  \
-                                            <td> <img src='http://openweathermap.org/img/w/10d.png'> </td>  \
+                                            <td> <img src='http://openweathermap.org/img/w/"+json_array.weather[0].icon+".png'> </td>  \
                                         </tr> \
                                         <tr>  \
                                             <td>Max Tempature</td>  \
-                                            <td> 1 </td>  \
+                                            <td> "+json_array.main.temp_max+" </td>  \
                                         </tr> \
                                         <tr>  \
                                             <td>Min Tempature</td>  \
-                                            <td> 1 </td>  \
+                                            <td> "+json_array.main.temp_min+" </td>  \
                                         </tr> \
                                         <tr>  \
                                             <td>Predicited rainfall</td>  \
-                                            <td> 1 </td>  \
+                                            <td> "+rain+" </td>  \
                                         </tr> \
                                         <tr class='pressue_display'> \
                                             <td>Pressure</td> \
-                                            <td> </td> \
+                                            <td> "+json_array.main.pressure+" </td> \
                                         </tr> \
                                          <tr class='humidity_display'> \
                                             <td>Humidity</td> \
-                                            <td> </td> \
+                                            <td> "+json_array.main.humidity+"% </td> \
                                         </tr> \
                                          <tr class='wind_speed_display'> \
                                             <td>Wind Speed</td>  \
-                                            <td>  </td> \
+                                            <td> "+json_array.wind.speed+" </td> \
                                         </tr> \
                                     </table>"
     return text;
@@ -292,7 +300,7 @@ var generate_row_4 = function(json_object,start,finish) {
             no_columns = "six";
             break;
         case 1:
-            no_columns = "twelve";
+            no_columns = "six offset-by-three";
             break;
     }
     
@@ -314,4 +322,17 @@ var generate_row_4 = function(json_object,start,finish) {
     return finisihed_row;
 ;}
 
+var create_first_forecast_row = function(json_object,day_1_items){
+    if (day_1_items >= 4) {
+        var forcasts_on_second_row = (day_1_items % 4);
+        var first_row = generate_row_4(json_object,0,4);
+        var second_row = generate_row_4(json_object,4,forcasts_on_second_row);
+        var both_row = first_row + second_row;
+    } else {
+        var both_row = generate_row_4(json_object,0,day_1_items);
+    }
+    // Add formating for to capture whole row in a class
+    both_row = "<div class='day_1_extend_forcast'>" +both_row + "</div>"
+    return both_row;
 
+;}
