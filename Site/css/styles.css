@@ -623,3 +623,15 @@ kit_text_wraped {
 .lined td{
     border:5px solid black;
 }
+
+.pressue_display {
+    display: none;
+}
+
+.wind_speed_display {
+    display: none;
+}
+
+.humidity_display {
+    display: none;
+}
