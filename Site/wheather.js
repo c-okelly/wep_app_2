@@ -3,15 +3,20 @@ $(document).ready(function () {
     // Call function to reload map and out put API data to page
 //    call_api_load_map();
         
-        // Verify that all item have been fileld in.
-        if (($("input[name=units]:checked").val()) != undefined) {
-            // Clear forcast of any previos result
+        // Verify that all item have been fileld in and provided warnings for empty fields
+        console.log($("input[id=lat]").val().length !== 0);
+        
+        if ($("input[id=lat]").val().length === 0) {
+            alert("Please choose a location.");
+        } else if ($("input[name=units]:checked").val() === undefined) {
+            alert("Please choose a unit of mesaurement.");
+        } else if ($("input[name=no_days]:checked").val() === undefined) {
+            alert("Please choose the number of days you want weather forecast for");
+        } else {
             $("#forecast").empty();
             call_api_load_map();
-                                                                 } else {
-                                                                  alert("Pleae fill out the whole form");   
-                                                                 }
-        
+        }
+    
     // Stops page reloading.
     return false;
     });
@@ -34,7 +39,6 @@ function initMap() {
       zoom: 8
     });
   };
-
 
 // Based of the Google maps Api documentation
 // Load autocomplete search bar to find places.
