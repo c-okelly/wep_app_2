@@ -635,3 +635,25 @@ kit_text_wraped {
 .humidity_display {
     display: none;
 }
+
+
+.day_1_extend_forcast  {
+    display: none;
+}
+
+.day_2_extend_forcast {
+    display: none;
+}
+
+.day_3_extend_forcast {
+    display: none;
+}
+
+.day_4_extend_forcast {
+    display: none;
+}
+
+.day_5_extend_forcast {
+    display: none;
+}
+

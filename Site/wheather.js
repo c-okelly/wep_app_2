@@ -20,6 +20,8 @@ $(document).ready(function () {
     
     // Load and unload info depending on check boxes
     check_boxs();
+    // Call function to fade 24 hour forcast in and out.
+    fade_on_click_for_24_hour_forcasts();
     
 });
 
@@ -59,7 +61,7 @@ var call_api_load_map = function() {
     var no_days = $("input[name=no_days]:checked").val();    
     var url_start = "http://api.openweathermap.org/data/2.5/forecast/daily?"; // To get daily data
     var url_start_3h = "http://api.openweathermap.org/data/2.5/forecast?";
-    var api_key = "3a63ff88497e73a0dd39208e8e969b5e";
+    var api_key = "de62d6113ecfd83ddd3b447b1eebae07";
     
     // Create search term
     var search_url = url_start + "lat=" + lat + "&lon=" + long  + "&mode=json&appid=" + api_key + "&units=" + units + "&cnt=5"// + no_days;
@@ -119,7 +121,6 @@ var call_api_load_map = function() {
          setTimeout(function() {tweenty_four_hours(json_24,no_days);},2000)
      });
     
-    // Two loops to create and insert the data
     
 };
 
@@ -166,7 +167,7 @@ var inset_main_information = function (day_no,date,wheather_discription,icon_no,
                                         </tr> \
                                     </table> \
                                 </div> \
-                            </div> </div><br>";
+                            </div>";
     return text_input;
 }  
 
@@ -232,7 +233,6 @@ var tweenty_four_hours = function(json_object,no_days) {
     
     // Create first day of forcasts
     day_1_forcasts = create_first_forecast_row(json_object,day_1_items);
-    console.log(day_1_forcasts);
     
     day_2_forscast = create_gen_full_forcast_row(json_object,day_1_items,2);
     day_3_forscast = create_gen_full_forcast_row(json_object,day_1_items,3);
@@ -250,8 +250,13 @@ var tweenty_four_hours = function(json_object,no_days) {
 
 // Use json array from object to bulid general table in html ready to be inserted
 var generate_single_table = function(json_array) {
-    var rain = json_array.rain["3h"];
-    if (rain === undefined) {rain = "0"};
+    var rain;
+    try {
+        rain = json_array.rain["3h"];
+    } 
+    catch(err) {
+        rain = "0";
+    }
     
     var text = "<table class='lined'> \
                                         <tr>  \
@@ -333,11 +338,13 @@ var generate_row_4 = function(json_object,start,finish) {
 
 // Create first forecast row. Unique as is dynamially generated
 var create_first_forecast_row = function(json_object,day_1_items){
+//    console.log(day_1_items);
     if (day_1_items >= 4) {
         var forcasts_on_second_row = (day_1_items % 4);
         var first_row = generate_row_4(json_object,0,4);
         var second_row = generate_row_4(json_object,4,forcasts_on_second_row);
         var both_row = first_row + second_row;
+//        console.log(both_row);
     } else {
         var both_row = generate_row_4(json_object,0,day_1_items);
     }
@@ -345,7 +352,7 @@ var create_first_forecast_row = function(json_object,day_1_items){
     var statement = "";
     if (day_1_items === 0) {statement = "Sorry. There are no more forcasts for the day as it is alreayd past 21:00";}
     // Add formating for to capture whole row in a class
-    both_row = "<div class='day_1_extend_forcast, center'> 24 hour forcasts for day 1<br>" + statement + both_row + "<br></div>"
+    both_row = "<div class='day_1_extend_forcast'> 24 hour forcasts for day 1<br>" + statement + both_row + "<br></div>"
     return both_row;
 
 ;}
@@ -357,11 +364,51 @@ var create_gen_full_forcast_row = function(json_object,first_day_no_forcastas,da
     var row_1 = generate_row_4(json_object,start_point,(start_point+4))
     var row_2 = generate_row_4(json_object,(start_point+4),(start_point+8));
     
-    var both_rows = "<div class='day_"+day_no+"_extend_forcast, center'> 24 hour Forecasts for day "+ day_no + row_1 + " <br>"+ row_2 +"</div>";
+    var both_rows = "<div class='day_"+day_no+"_extend_forcast'> 24 hour Forecasts for day "+ day_no + row_1 + " <br>"+ row_2 +"</div> <br>";
     
     return both_rows;
     ;}
 
-var fade_on_click_for_24_hour_forcasta = function() {
-    var x = 1;
-    ;}
+// Functions to fadein and fadeout 24 hour div forecast. Have to use on as elements are dynimally inserted in DOM
+var fade_on_click_for_24_hour_forcasts = function() {
+    $(document).on('click', '.forecast_for_day_1', function(){ 
+        if ($(".day_1_extend_forcast").css('display') === 'none') {
+            $(".day_1_extend_forcast").fadeIn();
+        }
+        else if ($(".day_1_extend_forcast").css('display') === 'block') {
+            $(".day_1_extend_forcast").fadeOut();
+        }
+    });
+    $(document).on('click', '.forecast_for_day_2', function(){ 
+        if ($(".day_2_extend_forcast").css('display') === 'none') {
+            $(".day_2_extend_forcast").fadeIn();
+        }
+        else if ($(".day_2_extend_forcast").css('display') === 'block') {
+            $(".day_2_extend_forcast").fadeOut();
+        }
+    });
+    $(document).on('click', '.forecast_for_day_3', function(){ 
+        if ($(".day_3_extend_forcast").css('display') === 'none') {
+            $(".day_3_extend_forcast").fadeIn();
+        }
+        else if ($(".day_3_extend_forcast").css('display') === 'block') {
+            $(".day_3_extend_forcast").fadeOut();
+        }
+    });
+    $(document).on('click', '.forecast_for_day_4', function(){ 
+        if ($(".day_4_extend_forcast").css('display') === 'none') {
+            $(".day_4_extend_forcast").fadeIn();
+        }
+        else if ($(".day_4_extend_forcast").css('display') === 'block') {
+            $(".day_4_extend_forcast").fadeOut();
+        }
+    });
+    $(document).on('click', '.forecast_for_day_5', function(){ 
+        if ($(".day_5_extend_forcast").css('display') === 'none') {
+            $(".day_5_extend_forcast").fadeIn();
+        }
+        else if ($(".day_5_extend_forcast").css('display') === 'block') {
+            $(".day_5_extend_forcast").fadeOut();
+        }
+    });
+;}
