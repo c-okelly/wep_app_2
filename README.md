@@ -3,6 +3,10 @@ This file contains the readme for my Web-app Assighment number 2
 Name Conor O'Kelly.
 
 All of the basic requirement of the task where meet. I have used a number of different api to enhance my overall project.
+I have intergrated my new page into my old site. The forecaster.html file is loacted in top level of the directory so it is easy to find.
+The page in particular is responsive to size chagnes. This inclused all of the information that is dynamically inserted into the page.
+
+I have put all of my javascript code into a seperate files called wheather.js. 
 
 I have split my Javascript code into a number of functions and tried to provided effective comments throughout.
 
