@@ -20,4 +20,4 @@ Jquery json request do not have any inbuilt error catching. To account for this 
 
 The 24 hour forecast request only loads the relevant periods for the first day. This also uses the correctly formated html / css to make the tables align properly.
 
-
+In the case that there are no more forcast for the current day as it is alreayd past 22:00 the appropriate message is displayed.
