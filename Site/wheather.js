@@ -4,7 +4,7 @@ $(document).ready(function () {
 //    call_api_load_map();
         
         // Verify that all item have been fileld in and provided warnings for empty fields
-        console.log($("input[id=lat]").val().length !== 0);
+//        console.log($("input[id=lat]").val().length !== 0);
         
         if ($("input[id=lat]").val().length === 0) {
             alert("Please choose a location.");
@@ -65,19 +65,25 @@ var call_api_load_map = function() {
     var no_days = $("input[name=no_days]:checked").val();    
     var url_start = "http://api.openweathermap.org/data/2.5/forecast/daily?"; // To get daily data
     var url_start_3h = "http://api.openweathermap.org/data/2.5/forecast?";
-    var api_key = "de62d6113ecfd83ddd3b447b1eebae07";
+    var api_key_1 = "de62d6113ecfd83ddd3b447b1eebae07";
+    var api_key_2 = "b190585192d3161c952159f5ce643447";
     
     // Create search term
-    var search_url = url_start + "lat=" + lat + "&lon=" + long  + "&mode=json&appid=" + api_key + "&units=" + units + "&cnt=5"// + no_days;
-    var serach_24_url = url_start_3h + "lat=" + lat + "&lon=" + long  + "&mode=json&appid=" + api_key + "&units=" + units;
+    var search_url = url_start + "lat=" + lat + "&lon=" + long  + "&mode=json&appid=" + api_key_1 + "&units=" + units + "&cnt=5"// + no_days;
+    var serach_24_url = url_start_3h + "lat=" + lat + "&lon=" + long  + "&mode=json&appid=" + api_key_2 + "&units=" + units;
     
     // Created and update new maps
     new google.maps.Map(document.getElementById('map'), {center: {lat: parseFloat(lat), lng: parseFloat(long)},zoom: 9});
     
+    // Varialbe to test that json file has been succesfully recieved
+    var success_standard = false;
+    var success_24_hour = false;
+    
     // Make Json file call and create data output.
     $.getJSON(search_url, function(data) {
         var json = data;
-        
+        // suceessfull => set to true
+        success_standard = true;
         
 //        var no_days = no_days;
         
@@ -116,25 +122,34 @@ var call_api_load_map = function() {
         $("#forecast").append(text_input);
             ;}
         ;})  
+
     
     // Jason call for wheather every three hours
      $.getJSON(serach_24_url, function(data) {
         var json_24 = data;
-         console.log(json_24);
+        success_24_hour = true;
+//         console.log(json_24);
          // Set timeout user to prevent 429 error from open wheahter api
-         setTimeout(function() {tweenty_four_hours(json_24,no_days);},2000)
+         setTimeout(function() {tweenty_four_hours(json_24,no_days);},1000)
      });
     
-    
+    setTimeout(function() {
+        if (success_standard === false) {
+         alert("Data request for standard weather report has failed to load");   
+        ;}
+        if (success_24_hour === false) {
+         alert("Data request for 24 hour weather report has failed to load");   
+        ;} 
+        ;},2000)
 };
 
 // Load main text into page
 var inset_main_information = function (day_no,date,wheather_discription,icon_no,max_temp,min_temp,temp_symbol,rain,pressure,humidity,wind_speed) {
     var text_input = "<div class='forecast_for_day_"+day_no+"'><div class='row'> \
                                 <div class='three columns offset-by-two'> \
-                                   <p> Wheather for the<br> "+date+" is.<br> \
-                                    The wheather today is "+wheather_discription+". <br> <br> \
-                                    The wheather icon for the day is <br>  \
+                                   <p> Weather for the<br> "+date+" is.<br> \
+                                    The weather today is "+wheather_discription+". <br> <br> \
+                                    The weather icon for the day is <br>  \
                                        <img src='http://openweathermap.org/img/w/"+icon_no+".png'>  \
                                     \
                                     </p> \
@@ -142,7 +157,7 @@ var inset_main_information = function (day_no,date,wheather_discription,icon_no,
                                 <div class='three columns'> \
                                     <table class='lined'>  \
                                         <tr> \
-                                            <td style='min-width:200px'>Wheather information</td> \
+                                            <td style='min-width:200px'>Weather information</td> \
                                             <td style='min-width:80px'></td> \
                                         </tr> \
                                         <tr> \
@@ -264,15 +279,15 @@ var generate_single_table = function(json_array) {
     
     var text = "<table class='lined'> \
                                         <tr>  \
-                                            <td style='min-width:120px;'>Wheather info at</td>  \
+                                            <td style='min-width:120px;'>Weather info at</td>  \
                                             <td style='min-width:60px'> "+json_array.dt_txt+"</td> \
                                         </tr> \
                                         <tr>  \
-                                            <td>Wheather description</td>  \
+                                            <td>Weather description</td>  \
                                             <td> "+json_array.weather[0].description+" </td>  \
                                         </tr> \
                                         <tr>  \
-                                            <td>Wheather icon</td>  \
+                                            <td>Weather icon</td>  \
                                             <td> <img src='http://openweathermap.org/img/w/"+json_array.weather[0].icon+".png'> </td>  \
                                         </tr> \
                                         <tr>  \
