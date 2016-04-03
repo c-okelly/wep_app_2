@@ -43,8 +43,8 @@ function initMap() {
 // Based of the Google maps Api documentation
 // Load autocomplete search bar to find places.
 function init() {
-    var input = document.getElementById('locationTextField');
-    var autocomplete = new google.maps.places.Autocomplete(input);
+    var bar_location = document.getElementById('search_bar');
+    var autocomplete = new google.maps.places.Autocomplete(bar_location);
     
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
         var place = autocomplete.getPlace();
