@@ -369,7 +369,7 @@ var create_first_forecast_row = function(json_object,day_1_items){
     }
     // Statement if no results to shows as no more forecast are availibe for the day.
     var statement = "";
-    if (day_1_items === 0) {statement = "Sorry. There are no more forcasts for the day as it is alreayd past 21:00";}
+    if (day_1_items === 0) {statement = "Sorry. There are no more forcasts for the day as it is past 21:00";}
     // Add formating for to capture whole row in a class
     both_row = "<div class='day_1_extend_forcast'> 24 hour forcasts for day 1<br>" + statement + both_row + "<br></div>"
     return both_row;
